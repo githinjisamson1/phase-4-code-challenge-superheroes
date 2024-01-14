@@ -2,9 +2,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
 
+# instantiate SQLAlchemy
 db = SQLAlchemy()
 
-
+# define Hero, HeroPower, Power models with serialization and validation
 class Hero(db.Model, SerializerMixin):
     __tablename__ = 'heroes'
 

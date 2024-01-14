@@ -5,20 +5,25 @@ from flask_migrate import Migrate
 
 from models import db, Hero, HeroPower, Power
 
+# instantiate Flask app 
 app = Flask(__name__)
+
+# configure Flask app with SQLAlchemy settings
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# initialize Flask-Migrate app and SQLAlchemy instance
 migrate = Migrate(app, db)
 
+# initialize the db with app
 db.init_app(app)
 
-
+# home route
 @app.route('/')
 def home():
     return 'Welcome to Superheroes API!'
 
-
+# route for handling heroes
 @app.route("/heroes", methods=["GET", "POST"])
 def heroes():
     if request.method == "GET":
@@ -50,7 +55,7 @@ def heroes():
 
         return response
 
-
+# route for handling individual heroes
 @app.route("/heroes/<int:hero_id>", methods=["GET", "PATCH", "DELETE"])
 def hero(hero_id):
     hero = Hero.query.filter_by(id=hero_id).first()
@@ -108,7 +113,7 @@ def hero(hero_id):
 
             return response
 
-
+# route for handling powers
 @app.route("/powers", methods=["GET"])
 def powers():
     if request.method == "GET":
@@ -121,7 +126,7 @@ def powers():
 
         return response
 
-
+# route for handling individual powers
 @app.route("/powers/<int:power_id>", methods=["GET", "PATCH", "DELETE"])
 def power(power_id):
     power = Power.query.filter_by(id=power_id).first()
@@ -164,7 +169,7 @@ def power(power_id):
 
             return response
 
-
+# route for creating heropowers
 @app.route("/heropowers", methods=["POST"])
 def heropowers():
     data = request.get_json()
@@ -186,6 +191,6 @@ def heropowers():
 
     return response
 
-
+# executed only if run/not if imported
 if __name__ == '__main__':
     app.run(port=5555)
