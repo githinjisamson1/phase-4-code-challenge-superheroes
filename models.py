@@ -34,6 +34,13 @@ class HeroPower(db.Model, SerializerMixin):
 
     serialize_rules = ("-hero.heropowers", "-power.heropowers")
 
+    @validates("strength")
+    def validate_strength(self, key, strength):
+        if strength not in ["Strong", "Weak", "Average"]:
+            raise ValueError(
+                "Strength must be one of the following values: 'Strong', 'Weak', 'Average'")
+        return strength
+
     def __repr__(self):
         return f'''HeroPower {self.strength}'''
 
@@ -50,6 +57,18 @@ class Power(db.Model, SerializerMixin):
     heropowers = db.relationship("HeroPower", backref="power")
 
     serialize_rules = ("-heropowers.power")
+
+    @validates("description")
+    def validate_description(self, key, description):
+        if not description:
+            raise ValueError("Description must be present")
+
+        else:
+            if description and len(description) < 20:
+                raise ValueError(
+                    "Description must be at least 20 characters long")
+
+            return description
 
     def __repr__(self):
         return f'''Power {self.name} {self.description}'''
