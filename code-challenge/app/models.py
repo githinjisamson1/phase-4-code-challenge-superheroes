@@ -5,6 +5,7 @@ from sqlalchemy.orm import validates
 # instantiate SQLAlchemy
 db = SQLAlchemy()
 
+
 # define Hero, HeroPower, Power models with serialization and validation
 class Hero(db.Model, SerializerMixin):
     __tablename__ = 'heroes'
@@ -16,6 +17,7 @@ class Hero(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     heropowers = db.relationship("HeroPower", backref="hero")
+    # powers = db.relationship("HeroPower", back_populates="powers")
 
     serialize_rules = ("-heropowers.hero",)
 
@@ -34,6 +36,9 @@ class HeroPower(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     serialize_rules = ("-hero.heropowers", "-power.heropowers",)
+
+    # powers = db.relationship("Hero", back_populates="powers")
+    # heroes = db.relationship("Power", back_populates="heroes")
 
     @validates("strength")
     def validate_strength(self, key, strength):
@@ -56,6 +61,7 @@ class Power(db.Model, SerializerMixin):
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
     heropowers = db.relationship("HeroPower", backref="power")
+    # heroes = db.relationship("HeroPower", back_populates="heroes")
 
     serialize_rules = ("-heropowers.power",)
 

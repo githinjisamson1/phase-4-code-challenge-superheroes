@@ -12,9 +12,10 @@ function Hero() {
   useEffect(() => {
     fetch(`/heroes/${id}`).then((r) => {
       if (r.ok) {
-        r.json().then((hero) =>
-          setHero({ data: hero, error: null, status: "resolved" })
-        );
+        r.json().then((hero) => {
+          console.log(hero);
+          setHero({ data: hero, error: null, status: "resolved" });
+        });
       } else {
         r.json().then((err) =>
           setHero({ data: null, error: err.error, status: "rejected" })
@@ -33,9 +34,9 @@ function Hero() {
 
       <h3>Powers:</h3>
       <ul>
-        {hero.powers.map((power) => (
+        {hero.heropowers.map((power) => (
           <li key={hero.id}>
-            <Link to={`/powers/${power.id}`}>{power.name}</Link>
+            <Link to={`/powers/${power.power.id}`}>{power.power.name}</Link>
           </li>
         ))}
       </ul>
